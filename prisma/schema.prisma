@@ -8,11 +8,25 @@ datasource db {
 }
 
 model User {
-  id         String   @id @default(cuid())
-  name       String
-  email      String   @unique
-  password   String
-  phone      String?
-  bloodGroup String?
-  createdAt  DateTime @default(now())
+  id                 String   @id @default(cuid())
+  name               String
+  email              String   @unique
+  password           String
+
+  phone              String?
+  age                Int?
+  gender             String?
+
+  bloodGroup         String?
+
+  city               String?
+  state              String?
+
+  role               String? // DONOR RECEIVER BOTH
+
+  isVerified         Boolean @default(false)
+
+  documentUrl        String?
+
+  createdAt          DateTime @default(now())
 }
