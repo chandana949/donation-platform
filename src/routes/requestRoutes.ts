@@ -52,25 +52,22 @@ GET ALL OPEN REQUESTS
 */
 router.get("/", async (req, res) => {
   try {
-    const requests = await prisma.donationRequest.findMany({
-      where: {
-        status: "OPEN",
+   const requests = await prisma.donationRequest.findMany({
+  include: {
+    user: {
+      select: {
+        id: true,
+        name: true,
+        bloodGroup: true,
+        city: true,
+        role: true,
       },
-      include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
-            bloodGroup: true,
-            city: true,
-            role: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+    },
+  },
+  orderBy: {
+    createdAt: "desc",
+  },
+});
 
     res.json(requests);
   } catch (error) {

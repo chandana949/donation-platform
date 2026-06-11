@@ -1,13 +1,24 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
+
 import authRoutes from "./routes/authRoutes";
 import profileRoutes from "./routes/profileRoutes";
 import verificationRoutes from "./routes/verificationRoutes";
 import requestRoutes from "./routes/requestRoutes";
 import matchRoutes from "./routes/matchRoutes";
 import contactRoutes from "./routes/contactRoutes";
+
 dotenv.config();
+
 const app = express();
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
