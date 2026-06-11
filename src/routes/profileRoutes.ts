@@ -4,6 +4,48 @@ import { authMiddleware } from "../middleware/authMiddleware";
 
 const router = express.Router();
 
+/*
+====================================
+GET PROFILE
+====================================
+*/
+router.get("/", authMiddleware, async (req: any, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.user.userId,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        age: true,
+        gender: true,
+        bloodGroup: true,
+        city: true,
+        state: true,
+        role: true,
+        isVerified: true,
+        verificationStatus: true,
+      },
+    });
+
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+});
+
+/*
+====================================
+UPDATE PROFILE
+====================================
+*/
 router.put("/", authMiddleware, async (req: any, res) => {
   try {
     const {
