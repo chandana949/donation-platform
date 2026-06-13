@@ -100,6 +100,11 @@ router.post("/:id/accept", authMiddleware, async (req: any, res) => {
         message: "Request not found",
       });
     }
+    if (existingRequest.userId === req.user.userId) {
+  return res.status(400).json({
+    message: "You cannot accept your own request",
+  });
+}
 
     if (existingRequest.status === "ACCEPTED") {
       return res.status(400).json({

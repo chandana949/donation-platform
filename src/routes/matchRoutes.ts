@@ -5,6 +5,39 @@ const router = express.Router();
 
 /*
 ====================================
+BLOOD COMPATIBILITY RULES
+====================================
+*/
+
+const compatibilityMap: Record<string, string[]> = {
+  "O-": ["O-"],
+
+  "O+": ["O+", "O-"],
+
+  "A-": ["A-", "O-"],
+
+  "A+": ["A+", "A-", "O+", "O-"],
+
+  "B-": ["B-", "O-"],
+
+  "B+": ["B+", "B-", "O+", "O-"],
+
+  "AB-": ["AB-", "A-", "B-", "O-"],
+
+  "AB+": [
+    "AB+",
+    "AB-",
+    "A+",
+    "A-",
+    "B+",
+    "B-",
+    "O+",
+    "O-",
+  ],
+};
+
+/*
+====================================
 SMART DONOR MATCHING
 ====================================
 */
@@ -25,12 +58,20 @@ router.get("/:requestId", async (req, res) => {
       });
     }
 
+    const compatibleGroups =
+      compatibilityMap[request.bloodGroup] || [
+        request.bloodGroup,
+      ];
+
     const donors = await prisma.user.findMany({
       where: {
-        bloodGroup: request.bloodGroup,
+        bloodGroup: {
+          in: compatibleGroups,
+        },
+
         city: request.city,
-        availableToDonate: true,
       },
+
       select: {
         id: true,
         name: true,
@@ -46,8 +87,9 @@ router.get("/:requestId", async (req, res) => {
 
     res.json({
       request,
+      compatibleBloodGroups: compatibleGroups,
       totalMatches: rankedDonors.length,
-      donors: rankedDonors,
+      donors: rankedDonors, 
     });
   } catch (error) {
     console.error(error);

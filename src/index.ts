@@ -8,6 +8,7 @@ import verificationRoutes from "./routes/verificationRoutes";
 import requestRoutes from "./routes/requestRoutes";
 import matchRoutes from "./routes/matchRoutes";
 import contactRoutes from "./routes/contactRoutes";
+import statsRoutes from "./routes/statsRoutes";
 
 dotenv.config();
 
@@ -23,7 +24,7 @@ app.use(
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Donation Platform API Running");
+  res.send("BloodBridge API Running");
 });
 
 app.use("/api/auth", authRoutes);
@@ -32,6 +33,7 @@ app.use("/api/verification", verificationRoutes);
 app.use("/api/requests", requestRoutes);
 app.use("/api/match", matchRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/stats", statsRoutes);
 
 const PORT = 5000;
 
